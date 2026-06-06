@@ -144,7 +144,7 @@ function App() {
       {/* Navigation (Aperture Style) */}
       <nav className="fixed top-0 w-full z-50 px-6 py-8 md:px-12 flex justify-between items-center pointer-events-none mix-blend-difference text-white">
         <a href="#" className="nav-logo pointer-events-auto">
-            Nada Varna
+            Nada Sannidhi
         </a>
         <div className="hidden md:flex gap-10 items-center pointer-events-auto">
             <a href="#philosophy" className="nav-link font-sans-cond text-xs tracking-widest">Methodology</a>
@@ -564,7 +564,7 @@ function App() {
            </FadeIn>
         </div>
         <footer className="w-full text-center py-12 text-[0.6rem] uppercase tracking-[0.4em] text-ash/30 border-t border-ash/10">
-            NADA VARNA &nbsp; | &nbsp; {new Date().getFullYear()}
+            NADA SANNIDHI &nbsp; | &nbsp; {new Date().getFullYear()}
         </footer>
       </ThemeSection>
 
