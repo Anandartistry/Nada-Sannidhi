@@ -3,6 +3,8 @@ import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'mot
 import { 
   Flower2, Waves, Circle, Feather, ArrowRight, Sparkles, Volume2, Droplet, ChevronLeft, ChevronRight
 } from 'lucide-react';
+import pillarImg from '/pillar.jpeg';
+import anandImg from '/anand.jpeg';
 
 /* --- UTILS --- */
 const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => (
@@ -209,49 +211,49 @@ function App() {
       </nav>
 
       {/* --- ROOM 1: HERO / INITIATION --- */}
-      <ThemeSection id="arrival" bgClass="bg-[#FDFBF7]" theme="light" setActiveTheme={setActiveTheme}>
-        <div 
-          className="min-h-[100svh] w-full relative overflow-hidden bg-fixed bg-cover bg-center"
-          style={{ backgroundImage: "url('/pillar.jpeg')" }}
-        >
-          <div className="absolute inset-0 bg-black/40 z-0"></div>
-          <div className="mandala-mask z-0 opacity-10"></div>
+      <ThemeSection id="arrival" bgClass="bg-[#0B0A09]" theme="dark" setActiveTheme={setActiveTheme}>
+        <div className="min-h-[100svh] w-full relative overflow-hidden flex items-center justify-center">
+          {/* Main Hero Background Pillar Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 transition-transform duration-1000"
+            style={{ backgroundImage: `url(${pillarImg})` }}
+          />
 
-          <motion.div style={{ y: yParallaxHero, opacity: opacityFade }} className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-4 text-white gap-6 md:gap-8">
+          {/* Atmospheric gradient overlay: keeping the center and pillar clear and rich */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/60 z-0 pointer-events-none"></div>
+          {/* Subtle radial shadow to frame the cutout text against the background */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/55 via-black/20 to-transparent z-0 pointer-events-none"></div>
+          <div className="mandala-mask z-0 opacity-15"></div>
+
+          <motion.div style={{ y: yParallaxHero, opacity: opacityFade }} className="relative z-10 flex flex-col items-center justify-center text-center px-4 text-white max-w-5xl mx-auto pt-6 md:pt-8">
             <motion.h1 
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 2.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="leading-none md:leading-tight font-serif uppercase text-center text-white"
+              transition={{ duration: 2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="leading-none md:leading-tight font-serif uppercase text-center select-none mb-5 md:mb-7"
             >
-              <span className="text-5xl md:text-7xl lg:text-[6rem] font-normal tracking-wide">NADA</span> <br /> 
-              <span className="text-6xl md:text-8xl lg:text-[7.5rem] font-bold">SANNIDHI</span>
+              {/* Option 2: Warm Antique Gold / Copper Foil Gradient */}
+              <span className="block text-5xl md:text-7xl lg:text-[6.5rem] font-normal tracking-[0.14em] bg-gradient-to-r from-[#FBF2E3] via-[#E4C87F] to-[#D4A359] bg-clip-text text-transparent drop-shadow-[0_4px_25px_rgba(0,0,0,0.9)] drop-shadow-[0_0_35px_rgba(228,200,127,0.35)]">
+                NADA
+              </span>
+              <span className="block text-6xl md:text-8xl lg:text-[8rem] font-bold tracking-tight bg-gradient-to-r from-[#FCE8B8] via-[#E5B563] to-[#C97B32] bg-clip-text text-transparent drop-shadow-[0_6px_30px_rgba(0,0,0,0.95)] drop-shadow-[0_0_50px_rgba(201,123,50,0.45)]">
+                SANNIDHI
+              </span>
             </motion.h1>
 
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 2.5, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="font-sans text-xl md:text-3xl font-light text-center text-[#EAE0D5]"
+              transition={{ duration: 2, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="font-sans text-base md:text-xl lg:text-2xl font-extralight tracking-[0.08em] md:tracking-[0.12em] uppercase text-center text-[#F2EBE1]/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] mb-8 md:mb-11"
             >
-              your gateway to chanting and classical music.
-            </motion.p>
-
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 3, delay: 1, ease: "easeOut" }}
-              className="font-['Lato'] font-medium text-xs md:text-sm tracking-[0.3em] uppercase text-white flex items-center gap-4"
-            >
-              <span className="w-8 h-[1px] bg-[#B84A32]"></span>
-              NO PRIOR EXPERIENCE NEEDED
-              <span className="w-8 h-[1px] bg-[#B84A32]"></span>
+              Offering Sacred Chants and Classical Music
             </motion.p>
             
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.5, delay: 1.5, ease: "easeOut" }}
+              transition={{ duration: 1.5, delay: 0.9, ease: "easeOut" }}
             >
               <HeroButton />
             </motion.div>
@@ -362,7 +364,7 @@ function App() {
             <FadeIn className="lg:col-span-5 relative">
               <div className="w-full aspect-[3/4] relative overflow-hidden flex items-center justify-center p-4">
                 <div className="absolute inset-0 border border-[#B84A32] translate-x-4 translate-y-4 md:translate-x-6 md:translate-y-6 z-0 mix-blend-multiply opacity-20"></div>
-            <img src="/anand.jpeg" alt="Anand Sreenivasan" className="relative z-10 w-full h-full object-cover transition-transform duration-[3s] hover:scale-105" />
+            <img src={anandImg} alt="Anand Sreenivasan" className="relative z-10 w-full h-full object-cover transition-transform duration-[3s] hover:scale-105" />
               </div>
             </FadeIn>
             
