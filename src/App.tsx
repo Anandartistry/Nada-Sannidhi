@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'motion/react';
 import { 
-  Flower2, Waves, Circle, Feather, ArrowRight, Sparkles, Volume2, Droplet, ChevronLeft, ChevronRight
+  Flower2, Waves, Circle, Feather, ArrowRight, Sparkles, Volume2, Droplet, ChevronLeft, ChevronRight, Globe
 } from 'lucide-react';
 import pillarImg from '/pillar.jpeg';
 import anandImg from '/anand.jpeg';
@@ -89,6 +89,246 @@ const MARQUEE_TEXT = [
   'GEOMETRY OF SOUND',
   'BHAKTI SADHANA'
 ];
+
+interface OfferingProgram {
+  id: string;
+  image: string;
+  sessionType: string;
+  tags: string[];
+  title: string;
+  subtitle: string;
+  price: string;
+  buttonText: string;
+}
+
+const OFFERING_PROGRAMS: OfferingProgram[] = [
+  {
+    id: "guru-paduka-stotram",
+    image: `${import.meta.env.BASE_URL}offerings/card-4-guru-paduka.jpg`,
+    sessionType: "RECORDED SESSION | 1 HR 30 MINS",
+    tags: ["WORKSHOPS", "CHANTS"],
+    title: "GURU PADUKA STOTRAM",
+    subtitle: "Lifetime Access",
+    price: "INR 1500",
+    buttonText: "BEGIN NOW",
+  },
+  {
+    id: "parvati-panchakam",
+    image: `${import.meta.env.BASE_URL}transformative-body-mind.jpg`,
+    sessionType: "RECORDED SESSION | 1 HR 30 MINS",
+    tags: ["WORKSHOPS", "CHANTS"],
+    title: "PARVATI PANCHAKAM",
+    subtitle: "Lifetime Access",
+    price: "INR 1500",
+    buttonText: "BEGIN NOW",
+  },
+  {
+    id: "bhairavi-stavan",
+    image: `${import.meta.env.BASE_URL}lamp.jpeg`,
+    sessionType: "RECORDED SESSION | 1 HR 30 MINS",
+    tags: ["WORKSHOPS", "CHANTS"],
+    title: "BHAIRAVI STAVAN",
+    subtitle: "Lifetime Access",
+    price: "INR 1500",
+    buttonText: "BEGIN NOW",
+  },
+  {
+    id: "linga-bhairavi-shayan-arati",
+    image: `${import.meta.env.BASE_URL}shayan-arati.jpg`,
+    sessionType: "RECORDED SESSION | 1 HR 30 MINS",
+    tags: ["WORKSHOPS", "CHANTS"],
+    title: "LINGA BHAIRAVI SHAYAN ARATI",
+    subtitle: "Lifetime Access",
+    price: "INR 1500",
+    buttonText: "BEGIN NOW",
+  },
+  {
+    id: "soundarya-lahari",
+    image: `${import.meta.env.BASE_URL}offerings/card-1-guru-ashtakam.jpg`,
+    sessionType: "RECORDED SESSION | 1 HR 30 MINS",
+    tags: ["WORKSHOPS", "CHANTS"],
+    title: "SOUNDARYA LAHARI",
+    subtitle: "Lifetime Access",
+    price: "INR 1500",
+    buttonText: "BEGIN NOW",
+  },
+  {
+    id: "gauranga",
+    image: `${import.meta.env.BASE_URL}joyful-exploration.jpg`,
+    sessionType: "RECORDED SESSION | 1 HR 30 MINS",
+    tags: ["WORKSHOPS", "CHANTS"],
+    title: "GAURANGA",
+    subtitle: "Lifetime Access",
+    price: "INR 1500",
+    buttonText: "BEGIN NOW",
+  },
+  {
+    id: "nirvana-shatakam",
+    image: `${import.meta.env.BASE_URL}living-tradition.jpg`,
+    sessionType: "RECORDED SESSION | 1 HR 30 MINS",
+    tags: ["WORKSHOPS", "CHANTS"],
+    title: "NIRVANA SHATAKAM",
+    subtitle: "Lifetime Access",
+    price: "INR 1500",
+    buttonText: "BEGIN NOW",
+  }
+];
+
+/* --- BEGIN YOUR JOURNEY: OFFERINGS CAROUSEL --- */
+const ChantMarqueeSection = () => {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 20);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 20);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const el = trackRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', checkScroll, { passive: true });
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      el.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, []);
+
+  // Move smoothly to the next / previous set of cards
+  const scrollToNextSet = (direction: 'left' | 'right') => {
+    const el = trackRef.current;
+    if (!el) return;
+    const cardWidthWithGap = 400;
+    const visibleCards = Math.max(1, Math.floor(el.clientWidth / cardWidthWithGap));
+    const scrollAmount = visibleCards * cardWidthWithGap;
+    
+    el.scrollBy({
+      left: direction === 'right' ? scrollAmount : -scrollAmount,
+      behavior: 'smooth'
+    });
+  };
+
+  return (
+    <div className="pt-24 md:pt-32 pb-16 md:pb-28 w-full relative z-10 select-none overflow-hidden">
+      {/* Header Block */}
+      <div className="px-[6vw] md:px-[8vw] flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-8">
+        <div className="max-w-2xl">
+          <SectionLabel text="Programs & Offerings" color="text-[#B84A32] opacity-80" />
+          <h2 className="font-['Playfair_Display'] font-medium text-4xl md:text-5xl text-zinc-900 leading-tight">
+            Begin Your <em className="text-gradient">Journey</em>
+          </h2>
+        </div>
+
+        <div className="flex flex-col items-start md:items-end gap-3">
+          <p className="max-w-[340px] text-zinc-800 text-sm md:text-base font-normal leading-relaxed text-left md:text-right">
+            Carefully crafted online sessions designed to match your pace, from supportive group formats to personalized guidance.
+          </p>
+        </div>
+      </div>
+
+      {/* Cards Viewport with Floating Navigation Arrows */}
+      <div className="relative w-full px-[6vw] md:px-[8vw] group/carousel">
+        {/* Left Arrow Button (shown when user scrolled forward) */}
+        {canScrollLeft && (
+          <button
+            onClick={() => scrollToNextSet('left')}
+            aria-label="Previous set of cards"
+            className="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-30 p-2 text-white hover:text-white/80 active:scale-90 transition-all duration-200 cursor-pointer flex items-center justify-center drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] bg-black/40 hover:bg-black/70 rounded-full backdrop-blur-sm"
+          >
+            <ChevronLeft size={36} strokeWidth={2.5} />
+          </button>
+        )}
+
+        {/* Scrollable Track - Static with generous spacing */}
+        <div 
+          ref={trackRef}
+          className="w-full overflow-x-auto scroll-smooth scrollbar-none py-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] snap-x snap-mandatory flex gap-7 md:gap-8"
+        >
+          {OFFERING_PROGRAMS.map((program) => (
+            <div 
+              key={program.id} 
+              className="w-[310px] sm:w-[350px] md:w-[370px] shrink-0 snap-start bg-[#101724] border border-zinc-800/80 rounded-lg overflow-hidden flex flex-col justify-between shadow-[0_16px_40px_rgba(0,0,0,0.4)] hover:border-zinc-700 hover:shadow-[0_24px_55px_rgba(0,0,0,0.55)] transition-all duration-300 group cursor-default"
+            >
+              <div>
+                {/* Top Image: Stately 4:3 Aspect Ratio */}
+                <div className="relative w-full aspect-[4/3] overflow-hidden bg-zinc-900 shrink-0">
+                  <img 
+                    src={program.image} 
+                    alt={program.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                  />
+                </div>
+
+                {/* Card Content with Generous Breathing Space */}
+                <div className="p-6 sm:p-7 md:p-8 pb-3">
+                  {/* Session Type / Duration Header Line */}
+                  <p className="text-zinc-100 font-serif tracking-[0.14em] uppercase text-xs sm:text-sm font-medium mb-4">
+                    {program.sessionType}
+                  </p>
+
+                  {/* Tags Pill Row */}
+                  <div className="flex items-center gap-2.5 mb-5">
+                    {program.tags.map((tag, tIdx) => (
+                      <span 
+                        key={tIdx} 
+                        className="px-3.5 py-1 rounded-full border border-zinc-600/80 bg-zinc-800/40 text-[0.68rem] sm:text-xs font-['Lato'] font-medium uppercase tracking-wider text-zinc-300"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Program Title */}
+                  <h3 className="text-white font-serif uppercase tracking-wider font-semibold text-xl sm:text-2xl leading-snug mb-3">
+                    {program.title}
+                  </h3>
+
+                  {/* Subtitle / Access */}
+                  <p className="text-zinc-300 text-sm sm:text-base font-['Lato'] font-normal mb-5">
+                    {program.subtitle}
+                  </p>
+
+                  {/* Price */}
+                  <p className="text-white font-bold text-xl sm:text-2xl font-['Lato'] tracking-wide">
+                    {program.price}
+                  </p>
+                </div>
+              </div>
+
+              {/* Bottom Rounded Pill Button with Generous Margin */}
+              <div className="p-6 sm:p-7 md:p-8 pt-3 pb-7 md:pb-8">
+                <a 
+                  href={`https://wa.me/919790778251?text=${encodeURIComponent(`Hi, I would like to begin sadhana for ${program.title}`)}`}
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-full py-3.5 px-6 rounded-full border border-[#8C7A5B] hover:border-[#D4AF37] bg-transparent hover:bg-white/5 text-center font-serif text-xs sm:text-sm tracking-[0.2em] uppercase text-white font-medium transition-all duration-300 cursor-pointer block active:scale-[0.98]"
+                >
+                  {program.buttonText}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Right Arrow Button */}
+        {canScrollRight && (
+          <button
+            onClick={() => scrollToNextSet('right')}
+            aria-label="Next set of cards"
+            className="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 p-2 text-white hover:text-white/80 active:scale-90 transition-all duration-200 cursor-pointer flex items-center justify-center drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] bg-black/40 hover:bg-black/70 rounded-full backdrop-blur-sm"
+          >
+            <ChevronRight size={36} strokeWidth={2.5} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const HeroButton = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -292,61 +532,132 @@ function App() {
       </div>
 
       {/* --- ROOM 2: OUR APPROACH --- */}
-      <ThemeSection id="philosophy" bgClass="bg-[#FDFBF7]" theme="light" setActiveTheme={setActiveTheme}>
-        <div className="w-full relative z-10 pb-12 md:pb-24">
-          <div className="bg-[#0B1320] w-full pt-24 pb-56 md:pb-64 px-4 [clip-path:polygon(0_0,100%_0,100%_90%,0_100%)] z-10">
-            <div className="max-w-7xl mx-auto px-4 md:px-8">
-              <FadeIn className="text-left max-w-2xl">
-                  <div className="mb-6">
-                      <SectionLabel text="Our Approach" color="text-[#B84A32] opacity-90" />
-                  </div>
-                  <h2 className="font-['Playfair_Display'] tracking-wide text-4xl md:text-6xl text-white pt-2">
-                    <span className="font-light">Sound as a</span> <br/> <span className="font-semibold">Doorway to <span className="text-[#E4C87F]">Self-Transformation</span></span>
-                  </h2>
-                  <p className="font-['Lato'] text-lg md:text-xl mt-6 text-zinc-300">
-                    Nada Sannidhi is an endeavor to make traditional chanting and classical music accessible and welcoming for everyone. We offer these beautiful art forms not just to be learned, but to be experienced—making the journey both enjoyable and spiritually enriching.
-                  </p>
-              </FadeIn>
+      <ThemeSection 
+        id="philosophy" 
+        bgClass="relative z-20 overflow-hidden" 
+        theme="light" 
+        setActiveTheme={setActiveTheme}
+      >
+        {/* Layer 1: The Dark Grey Wedge below Texture-white.jpg with original approved angle, shifted left and up */}
+        <div 
+          className="absolute inset-0 bg-[#1A1E21] z-0 pointer-events-none"
+          style={{
+            clipPath: 'polygon(0 calc(100% - 6.5rem), calc(50% + 3rem) calc(100% - 2.5rem), 0 100%)',
+            WebkitClipPath: 'polygon(0 calc(100% - 6.5rem), calc(50% + 3rem) calc(100% - 2.5rem), 0 100%)',
+            transform: 'translate(-4rem, -2rem)',
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Layer 2: Texture-white.jpg on top, coming down from left to right */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat pointer-events-none"
+          style={{
+            backgroundImage: `url(${import.meta.env.BASE_URL}Texture-white.jpg)`,
+            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 5.5rem))',
+            WebkitClipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 5.5rem))',
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="w-full relative z-10 pb-44 md:pb-72">
+          
+          {/* Transition Wrapper */}
+          <div className="relative w-full">
+            {/* Black Transition Layer: slopes continuously downward from right to left in the same line of the blue border */}
+            <div 
+              className="absolute inset-0 bg-black z-0 pointer-events-none"
+              style={{
+                clipPath: 'polygon(0 0, 100% 0, 100% 82%, 0% 100%)',
+                WebkitClipPath: 'polygon(0 0, 100% 0, 100% 82%, 0% 100%)',
+              }}
+              aria-hidden="true"
+            />
+
+            {/* Main Blue Navy Tanpura Section: goes down in middle then up to left */}
+            <div 
+              className="bg-[#0B1320] w-full pt-20 md:pt-28 pb-56 md:pb-72 px-4 relative overflow-hidden z-10"
+              style={{
+                clipPath: 'polygon(0 0, 100% 0, 100% 82%, 28% 95%, 0 84%)',
+                WebkitClipPath: 'polygon(0 0, 100% 0, 100% 82%, 28% 95%, 0 84%)',
+              }}
+            >
+              {/* Tanpura Background Watermark */}
+              <div 
+                className="absolute inset-0 pointer-events-none z-0 overflow-hidden" 
+                aria-hidden="true"
+              >
+                <div 
+                  className="w-full h-full bg-cover bg-no-repeat bg-right mix-blend-luminosity translate-x-8 sm:translate-x-16 md:translate-x-24 translate-y-6 sm:translate-y-10 md:translate-y-14"
+                  style={{
+                    backgroundImage: `url(${import.meta.env.BASE_URL}Tanpura.jpg)`,
+                    WebkitMaskImage: 'radial-gradient(ellipse at 88% 55%, black 25%, transparent 68%)',
+                    maskImage: 'radial-gradient(ellipse at 88% 55%, black 25%, transparent 68%)',
+                  }}
+                />
+              </div>
+
+              <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+                <FadeIn className="text-left max-w-3xl">
+                    {/* Eyebrow header removed for cleaner, more minimalist flow */}
+                    <h2 className="font-serif uppercase tracking-wide text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-tight md:leading-none select-none">
+                      <span className="font-normal tracking-[0.08em] text-[#FDFBF7]">Sound as a</span> <br/> 
+                      <span className="font-bold tracking-tight text-white">
+                        Doorway to <span className="bg-gradient-to-r from-[#FCE8B8] via-[#E5B563] to-[#C97B32] bg-clip-text text-transparent">Self-Transformation</span>
+                      </span>
+                    </h2>
+                    <p className="font-['Lato'] font-light text-base md:text-xl mt-6 text-zinc-300 leading-relaxed max-w-2xl">
+                      Nada Sannidhi brings traditional chanting and classical music out of performance halls and into your daily life. Designed for every seeker, these art forms are offered not merely to be learned, but to be lived—turning sound into a passage toward inner stillness.
+                    </p>
+                </FadeIn>
+              </div>
             </div>
           </div>
 
-          <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-8 -mt-32 md:-mt-48">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-8 -mt-52 sm:-mt-60 md:-mt-64">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
                {[
                  {
                    title: "A JOYFUL EXPLORATION",
                    desc: "No prior experience is needed to begin. Whether you are just starting out or looking to deepen your practice, we make exploring classical chanting and music simple, enjoyable, and rewarding for all skill levels.",
-                   img: "https://images.unsplash.com/photo-1453227588063-bbeccc1c107e?q=80&w=1800&auto=format&fit=crop"
+                   img: `${import.meta.env.BASE_URL}joyful-exploration.jpg`
                  },
                  {
                    title: "TRANSFORMATIVE FOR BODY & MIND",
                    desc: "Beyond simply learning a skill, these timeless practices offer a profound sense of inner balance. Experience true stress reduction, cultural enrichment, and a natural blossoming of your physical and mental well-being.",
-                   img: "https://images.unsplash.com/photo-1542840410-3092f99611a3?q=80&w=1800&auto=format&fit=crop"
+                   img: `${import.meta.env.BASE_URL}transformative-body-mind.jpg`
                  },
                  {
-                   title: "SACRED GURU-SHISHYA ROOTS",
-                   desc: "Learn through interactive sessions with teachers deeply rooted in tradition. As passionate custodians of ancient wisdom, they don’t just teach—they nurture, inspire, and share the very essence of the practice.",
-                   img: "https://images.unsplash.com/photo-1605658145719-7561f558d1b1?q=80&w=1800&auto=format&fit=crop"
+                   title: "ROOTED IN LIVING TRADITION",
+                   desc: "Learn through intimate, interactive sessions anchored in authentic classical lineages. As dedicated practitioners of the art, we don’t just teach technique—we nurture your connection to the living essence of the practice.",
+                   img: `${import.meta.env.BASE_URL}guru-shishya-roots.jpg`
                  }
                ].map((item, index) => (
                   <div 
                      key={index}
                      onMouseEnter={() => setHoveredCard(index)}
                      onMouseLeave={() => setHoveredCard(null)}
-                     className={`relative overflow-hidden rounded-xl shadow-2xl h-[400px] md:h-[500px] cursor-pointer transition-all duration-500
-                       ${hoveredCard !== null && hoveredCard !== index ? 'grayscale opacity-50' : ''}`
+                     className={`relative overflow-hidden rounded-2xl border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)] h-[420px] md:h-[520px] cursor-pointer transition-all duration-500 bg-zinc-950
+                       ${hoveredCard !== null && hoveredCard !== index ? 'grayscale opacity-50 scale-[0.98]' : 'scale-100'}`
                      }
                   >
                      <img 
                         src={item.img} 
                         alt={item.title} 
-                        className={`absolute inset-0 object-cover w-full h-full transition-transform duration-700 ${hoveredCard === index ? 'scale-105' : 'scale-100'}`} 
+                        className={`absolute inset-0 object-cover w-full h-full transition-transform duration-700 ${hoveredCard === index ? 'scale-110' : 'scale-100'}`} 
                      />
-                     <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none z-10 transition-opacity duration-500"></div>
+                     {/* Dark luxury gradient overlays for crisp readability */}
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent pointer-events-none z-10 transition-opacity duration-500"></div>
+                     <div className="absolute inset-0 border border-white/10 rounded-2xl pointer-events-none z-20"></div>
+                     
                      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 flex flex-col justify-end">
-                         <h3 className={`text-white font-bold text-xl md:text-2xl uppercase tracking-wider transition-all duration-500 transform text-left ${hoveredCard === index ? 'translate-y-0' : 'translate-y-8 md:translate-y-12'}`}>{item.title}</h3>
-                         <div className={`mt-4 overflow-hidden transition-all duration-500 ${hoveredCard === index ? 'opacity-100 max-h-48' : 'opacity-0 max-h-0'}`}>
-                             <p className="text-zinc-200 font-['Lato'] text-sm md:text-base leading-relaxed text-left">{item.desc}</p>
+                         <h3 className={`text-white font-serif uppercase tracking-wider font-semibold text-lg md:text-xl transition-all duration-500 transform text-left drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] ${hoveredCard === index ? 'translate-y-0 text-white' : 'translate-y-6 md:translate-y-10'}`}>
+                           {item.title}
+                         </h3>
+                         <div className={`mt-3 overflow-hidden transition-all duration-500 ${hoveredCard === index ? 'opacity-100 max-h-48' : 'opacity-0 max-h-0'}`}>
+                             <p className="text-zinc-300 font-['Lato'] font-normal text-sm md:text-base leading-relaxed text-left drop-shadow-sm">
+                               {item.desc}
+                             </p>
                          </div>
                      </div>
                   </div>
@@ -356,7 +667,50 @@ function App() {
         </div>
       </ThemeSection>
 
-      {/* --- ROOM 3: THE GUIDE (LINEAGE) --- */}
+      {/* --- ROOM 3: INTAKE (OFFERINGS) --- */}
+      <ThemeSection id="programs-section" bgClass="bg-[#F3EFEA] text-zinc-900 relative z-10 -mt-12 md:-mt-16 pt-12 md:pt-16" theme="light" setActiveTheme={setActiveTheme}>
+        <div className="mandala-mask z-0 opacity-5"></div>
+        
+        {/* Option 1: Gentle Continuous Auto-Scroll (Infinite Ambient Marquee) */}
+        <ChantMarqueeSection />
+
+        <div className="pt-8 md:pt-16 pb-24 w-full px-[8vw] md:px-[10vw] relative z-10">
+          {/* Carnatic Vocals Pillar */}
+          <div className="flex flex-col md:flex-row-reverse items-center gap-16 md:gap-24 mt-12 md:mt-20">
+             <motion.div style={{ y: yParallaxFast }} className="w-full md:w-1/2 relative">
+                <div className="w-full aspect-[4/5] bg-[#FDFBF7] artifact-mask relative overflow-hidden group">
+                   <div className="absolute inset-0 bg-noise opacity-30 mix-blend-multiply z-20 transition-opacity duration-[2s] group-hover:opacity-40"></div>
+                   <img src={`${import.meta.env.BASE_URL}string.jpeg`} alt="Carnatic Music" className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-[3s] group-hover:scale-105 opacity-90" />
+                   <div className="absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-[2s] group-hover:opacity-0">
+                     <Volume2 size={40} strokeWidth={0.5} className="text-zinc-900/50" />
+                   </div>
+                </div>
+             </motion.div>
+             <div className="w-full md:w-1/2 flex flex-col justify-center">
+               <FadeIn>
+                 <SectionLabel text="◇ THE CLASSICAL FOUNDATION ◇" color="text-[#B84A32] opacity-90" />
+                 <ScrollParallax>
+                   <h2 className="font-['Playfair_Display'] font-medium text-4xl md:text-5xl text-zinc-900 leading-tight">
+                      Carnatic Vocals
+                   </h2>
+                 </ScrollParallax>
+                 <p className="mt-10 text-zinc-900 text-base md:text-lg font-normal leading-relaxed mb-4">
+                   Born from a profound understanding of life and creation, Carnatic music serves as a powerful vehicle to reach one's ultimate nature. Transforming both the practitioner and the listener—an impact now echoed by modern science—it aligns the human system and brings absolute stillness to the seeker.
+                 </p>
+                 <p className="text-zinc-900 text-base md:text-lg font-normal leading-relaxed mb-10">
+                   This journey requires no prior experience. Whether you are taking your very first step or looking to deepen an existing practice, our highly interactive live online sessions make learning this ancient discipline accessible, engaging, and profoundly rewarding.
+                 </p>
+                 <a href="https://wa.me/919790778251" target="_blank" rel="noopener noreferrer" className="inline-flex w-max items-center gap-2 rounded-full px-8 py-3 bg-zinc-900 hover:bg-zinc-800 transition-all duration-300 text-xs font-['Lato'] font-medium tracking-widest uppercase text-white">
+                   <span>Inquire for Carnatic</span>
+                   <ArrowRight size={14} className="ml-2" />
+                 </a>
+               </FadeIn>
+             </div>
+          </div>
+        </div>
+      </ThemeSection>
+
+      {/* --- ROOM 4: THE GUIDE (LINEAGE) --- */}
       <ThemeSection id="guide" bgClass="bg-[#FDFBF7] text-zinc-900 relative" theme="light" setActiveTheme={setActiveTheme}>
         <div className="mandala-mask z-0 opacity-5"></div>
         <div className="py-24 md:py-32 w-full px-[8vw] md:px-[10vw] relative z-10">
@@ -400,122 +754,6 @@ function App() {
               </FadeIn>
             </div>
           </div>
-        </div>
-      </ThemeSection>
-
-
-      {/* --- ROOM 5: INTAKE (OFFERINGS) --- */}
-      <ThemeSection id="programs-section" bgClass="bg-[#F3EFEA] text-zinc-900 relative" theme="light" setActiveTheme={setActiveTheme}>
-        <div className="mandala-mask z-0 opacity-5"></div>
-        <div className="pt-24 md:pt-32 pb-12 w-full px-[8vw] md:px-[10vw] relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-8">
-             <div className="max-w-2xl">
-               <SectionLabel text="Programs & Offerings" color="text-[#B84A32] opacity-80" />
-               <ScrollParallax>
-                 <h2 className="font-['Playfair_Display'] font-medium text-4xl md:text-5xl text-zinc-900 leading-tight">
-                   Begin Your <em className="text-gradient">Journey</em>
-                 </h2>
-               </ScrollParallax>
-             </div>
-             <p className="max-w-[300px] text-zinc-900 text-base md:text-lg font-normal leading-relaxed">
-               Carefully crafted online sessions designed to match your pace, from supportive group formats to personalized guidance.
-             </p>
-          </div>
-
-          <div ref={scrollRef} className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none space-x-6 py-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-            {[
-              {
-                title: "Nirvana Shatakam",
-                subtitle: "The embodiment of the spiritual pursuit."
-              },
-              {
-                title: "Guru Paduka Stotram",
-                subtitle: "Become receptive to the Guru's Grace."
-              },
-              {
-                title: "Guru Ashtakam",
-                subtitle: "Bow down to the Lotus Feet of the Guru."
-              },
-              {
-                title: "Gauranga",
-                subtitle: "A salutation to stillness embodied."
-              },
-              {
-                title: "Kalabhairavashtakam",
-                subtitle: "Transcend the limitations of life and death."
-              },
-              {
-                title: "Parvati Panchakam",
-                subtitle: "A hymn to Goddess Parvati to cross your limitations."
-              },
-              {
-                title: "Bhairavi Vandana",
-                subtitle: "An appeal to Devi for protection and liberation."
-              },
-              {
-                title: "Bhairavi Shatakam",
-                subtitle: "Receive the blessings of Devi in this life and beyond."
-              }
-            ].map((chant, idx) => (
-              <div key={idx} className="w-[280px] md:w-[320px] shrink-0 snap-start bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-100 p-6 rounded-2xl flex flex-col justify-between h-[300px] overflow-hidden transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-[0_16px_40px_rgb(0,0,0,0.08)] hover:border-[#B84A32]/40">
-                <div>
-                  <h3 className="text-2xl font-['Playfair_Display'] font-semibold text-zinc-900 mb-3">{chant.title}</h3>
-                  <p className="text-zinc-900 font-['Lato'] text-base md:text-lg leading-relaxed font-normal">
-                    {chant.subtitle}
-                  </p>
-                </div>
-                <div>
-                  <a href="https://wa.me/919790778251" target="_blank" rel="noopener noreferrer" className="inline-flex w-max items-center gap-2 rounded-full px-6 py-2 bg-zinc-900 hover:bg-zinc-800 transition-all duration-300 text-xs font-['Lato'] font-medium tracking-widest uppercase text-white">
-                    <span>Enroll</span>
-                    <ArrowRight size={14} className="ml-2" />
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-center items-center space-x-4 mt-8">
-            <button onClick={scrollLeft} className="p-3 rounded-full border border-zinc-200 text-zinc-600 hover:text-zinc-900 hover:bg-white transition-all duration-300">
-              <ChevronLeft size={20} strokeWidth={1} />
-            </button>
-            <button onClick={scrollRight} className="p-3 rounded-full border border-zinc-200 text-zinc-600 hover:text-zinc-900 hover:bg-white transition-all duration-300">
-              <ChevronRight size={20} strokeWidth={1} />
-            </button>
-          </div>
-          
-          {/* Carnatic Vocals Pillar */}
-          <div className="flex flex-col md:flex-row-reverse items-center gap-16 md:gap-24 mt-24 md:mt-32">
-             <motion.div style={{ y: yParallaxFast }} className="w-full md:w-1/2 relative">
-                <div className="w-full aspect-[4/5] bg-[#FDFBF7] artifact-mask relative overflow-hidden group">
-                   <div className="absolute inset-0 bg-noise opacity-30 mix-blend-multiply z-20 transition-opacity duration-[2s] group-hover:opacity-40"></div>
-                   <img src="/string.jpeg" alt="Carnatic Music" className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-[3s] group-hover:scale-105 opacity-90" />
-                   <div className="absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-[2s] group-hover:opacity-0">
-                     <Volume2 size={40} strokeWidth={0.5} className="text-zinc-900/50" />
-                   </div>
-                </div>
-             </motion.div>
-             <div className="w-full md:w-1/2 flex flex-col justify-center">
-               <FadeIn>
-                 <SectionLabel text="◇ THE CLASSICAL FOUNDATION ◇" color="text-[#B84A32] opacity-90" />
-                 <ScrollParallax>
-                   <h2 className="font-['Playfair_Display'] font-medium text-4xl md:text-5xl text-zinc-900 leading-tight">
-                      Carnatic Vocals
-                   </h2>
-                 </ScrollParallax>
-                 <p className="mt-10 text-zinc-900 text-base md:text-lg font-normal leading-relaxed mb-4">
-                   Born from a profound understanding of life and creation, Carnatic music serves as a powerful vehicle to reach one's ultimate nature. Transforming both the practitioner and the listener—an impact now echoed by modern science—it aligns the human system and brings absolute stillness to the seeker.
-                 </p>
-                 <p className="text-zinc-900 text-base md:text-lg font-normal leading-relaxed mb-10">
-                   This journey requires no prior experience. Whether you are taking your very first step or looking to deepen an existing practice, our highly interactive live online sessions make learning this ancient discipline accessible, engaging, and profoundly rewarding.
-                 </p>
-                 <a href="https://wa.me/919790778251" target="_blank" rel="noopener noreferrer" className="inline-flex w-max items-center gap-2 rounded-full px-8 py-3 bg-zinc-900 hover:bg-zinc-800 transition-all duration-300 text-xs font-['Lato'] font-medium tracking-widest uppercase text-white">
-                   <span>Inquire for Carnatic</span>
-                   <ArrowRight size={14} className="ml-2" />
-                 </a>
-               </FadeIn>
-             </div>
-          </div>
-
         </div>
       </ThemeSection>
 
@@ -597,7 +835,7 @@ function App() {
 }
 
 // Wrapper to handle beautiful theme transitions on scroll
-const ThemeSection = ({ id, bgClass, theme, children, setActiveTheme }: { id: string, bgClass: string, theme: string, children: React.ReactNode, setActiveTheme: any }) => {
+const ThemeSection = ({ id, bgClass, theme, children, setActiveTheme, style }: { id: string, bgClass: string, theme: string, children: React.ReactNode, setActiveTheme: any, style?: React.CSSProperties }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
 
@@ -608,7 +846,7 @@ const ThemeSection = ({ id, bgClass, theme, children, setActiveTheme }: { id: st
   }, [inView, theme, setActiveTheme]);
 
   return (
-    <section ref={ref} id={id} className={`w-full relative transition-colors duration-[1.5s] ease-in-out ${bgClass}`}>
+    <section ref={ref} id={id} className={`w-full relative transition-colors duration-[1.5s] ease-in-out ${bgClass}`} style={style}>
       {children}
     </section>
   );
