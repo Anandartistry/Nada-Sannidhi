@@ -445,15 +445,15 @@ const PaymentSuccessModal: React.FC<PaymentSuccessModalProps> = ({ isOpen, onClo
               <X size={20} strokeWidth={2} />
             </button>
 
-            {/* Sacred Icon Badge */}
-            <div className="mx-auto w-16 h-16 rounded-full bg-[#18202D] border border-[#D4AF37]/50 flex items-center justify-center mb-5 shadow-inner relative">
-              <div className="absolute inset-0 rounded-full bg-[#D4AF37]/10 animate-ping opacity-30 pointer-events-none" />
-              <CheckCircle2 size={32} className="text-[#D4AF37]" strokeWidth={1.75} />
+            {/* Top Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#B84A32]/40 bg-[#B84A32]/10 text-[#E87A60] text-[0.68rem] sm:text-xs font-['Lato'] tracking-[0.22em] uppercase font-medium mb-5">
+              <span>WELCOME TO NADA SANNIDHI FAMILY</span>
             </div>
 
-            {/* Sacred Tag */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B84A32]/40 bg-[#B84A32]/10 text-[#E87A60] text-[0.65rem] sm:text-xs font-['Lato'] tracking-[0.25em] uppercase font-medium mb-4">
-              <span>Sacred Offering Confirmed</span>
+            {/* Sacred Icon Badge */}
+            <div className="mx-auto w-14 h-14 rounded-full bg-[#18202D] border border-[#D4AF37]/50 flex items-center justify-center mb-5 shadow-inner relative">
+              <div className="absolute inset-0 rounded-full bg-[#D4AF37]/10 animate-ping opacity-30 pointer-events-none" />
+              <CheckCircle2 size={28} className="text-[#D4AF37]" strokeWidth={1.75} />
             </div>
 
             {/* Main Heading */}
@@ -466,25 +466,34 @@ const PaymentSuccessModal: React.FC<PaymentSuccessModalProps> = ({ isOpen, onClo
               Your official payment receipt has been emailed to you by Razorpay. You can watch your recorded masterclass right here:
             </p>
 
-            {/* Prominent Action Button */}
-            <div className="flex flex-col gap-3">
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-3.5">
+              {/* Primary Button 1: Solid Saffron */}
               <a
                 href="https://www.youtube.com/watch?v=j3KVjUmz3Sk"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-4 px-6 rounded-full bg-gradient-to-r from-[#B84A32] via-[#C95B42] to-[#B84A32] hover:brightness-110 text-white font-serif text-sm sm:text-base tracking-[0.16em] uppercase font-medium shadow-[0_10px_30px_rgba(184,74,50,0.35)] hover:shadow-[0_14px_40px_rgba(184,74,50,0.5)] transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer group active:scale-[0.98]"
+                className="w-full py-4 px-6 rounded-full bg-gradient-to-r from-[#B84A32] via-[#C95B42] to-[#B84A32] hover:brightness-110 text-white font-serif text-sm sm:text-base tracking-[0.16em] uppercase font-medium shadow-[0_10px_30px_rgba(184,74,50,0.35)] hover:shadow-[0_14px_40px_rgba(184,74,50,0.5)] transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer group active:scale-[0.98]"
               >
-                <Play size={18} fill="currentColor" className="text-white group-hover:scale-110 transition-transform" />
-                <span>Watch Masterclass</span>
-                <ExternalLink size={15} className="opacity-80 group-hover:translate-x-0.5 transition-transform" />
+                <span>▶ WATCH MASTERCLASS</span>
+              </a>
+
+              {/* Secondary Button 2: Clean Outline Button */}
+              <a
+                href="https://chat.whatsapp.com/YOUR_COMMUNITY_LINK"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3.5 px-6 rounded-full border border-[#8C7A5B]/70 hover:border-[#E87A60] bg-[#141C28]/80 hover:bg-[#B84A32]/15 text-[#FDFBF7] hover:text-[#E87A60] text-xs sm:text-sm font-['Lato'] tracking-[0.12em] uppercase font-medium transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group active:scale-[0.98]"
+              >
+                <span>💬 JOIN NADA SANNIDHI WHATSAPP COMMUNITY</span>
               </a>
 
               {/* Dismiss / Return to storefront button */}
               <button
                 onClick={onClose}
-                className="w-full py-3 px-6 rounded-full border border-zinc-700/80 hover:border-zinc-500 text-zinc-300 hover:text-white text-xs sm:text-sm font-['Lato'] tracking-[0.15em] uppercase transition-colors cursor-pointer mt-1"
+                className="w-full py-2.5 px-6 rounded-full text-zinc-400 hover:text-zinc-200 text-xs font-['Lato'] tracking-[0.15em] uppercase transition-colors cursor-pointer mt-1"
               >
-                Return to Storefront
+                Close & Return to Storefront
               </button>
             </div>
           </motion.div>
