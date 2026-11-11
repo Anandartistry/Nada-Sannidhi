@@ -502,11 +502,14 @@ function App() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Detect return from Razorpay payment
+    // Check URL query parameters for course=guru-paduka-stotram (or Razorpay payment return)
     const searchParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#\/?/, '?'));
 
-    const hasPaymentSuccess =
+    const courseParam = searchParams.get('course') || hashParams.get('course');
+
+    const isGuruPadukaSuccess =
+      courseParam === 'guru-paduka-stotram' ||
       searchParams.has('razorpay_payment_id') ||
       searchParams.has('razorpay_payment_link_id') ||
       searchParams.get('razorpay_payment_link_status') === 'paid' ||
@@ -519,16 +522,17 @@ function App() {
       hashParams.has('razorpay_payment_id') ||
       hashParams.get('payment') === 'success';
 
-    if (hasPaymentSuccess) {
+    if (isGuruPadukaSuccess) {
       setShowSuccessModal(true);
     }
   }, []);
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
-    // Clean up payment query parameters from URL without reloading
+    // Clean up query parameters from URL cleanly using window.history.replaceState without reloading
     if (window.history && window.history.replaceState) {
       const url = new URL(window.location.href);
+      url.searchParams.delete('course');
       url.searchParams.delete('razorpay_payment_id');
       url.searchParams.delete('razorpay_payment_link_id');
       url.searchParams.delete('razorpay_payment_link_status');
