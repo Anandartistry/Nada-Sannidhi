@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'motion/react';
 import { 
-  Flower2, Waves, Circle, Feather, ArrowRight, Sparkles, Volume2, Droplet, ChevronLeft, ChevronRight, Globe
+  Flower2, Waves, Circle, Feather, ArrowRight, Sparkles, Volume2, Droplet, ChevronLeft, ChevronRight, Globe,
+  X, Play, CheckCircle2, ExternalLink
 } from 'lucide-react';
 import pillarImg from '/pillar.jpeg';
 import anandImg from '/anand.jpeg';
@@ -99,6 +100,7 @@ interface OfferingProgram {
   subtitle: string;
   price: string;
   buttonText: string;
+  paymentUrl?: string;
 }
 
 const OFFERING_PROGRAMS: OfferingProgram[] = [
@@ -111,6 +113,7 @@ const OFFERING_PROGRAMS: OfferingProgram[] = [
     subtitle: "Lifetime Access",
     price: "INR 1500",
     buttonText: "BEGIN NOW",
+    paymentUrl: "https://rzp.io/rzp/guru-paduka-stotram",
   },
   {
     id: "parvati-panchakam",
@@ -303,7 +306,7 @@ const ChantMarqueeSection = () => {
               {/* Bottom Rounded Pill Button with Generous Margin */}
               <div className="p-6 sm:p-7 md:p-8 pt-3 pb-7 md:pb-8">
                 <a 
-                  href={`https://wa.me/919790778251?text=${encodeURIComponent(`Hi, I would like to begin sadhana for ${program.title}`)}`}
+                  href={program.paymentUrl || `https://wa.me/919790778251?text=${encodeURIComponent(`Hi, I would like to begin sadhana for ${program.title}`)}`}
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="w-full py-3.5 px-6 rounded-full border border-[#8C7A5B] hover:border-[#D4AF37] bg-transparent hover:bg-white/5 text-center font-serif text-xs sm:text-sm tracking-[0.2em] uppercase text-white font-medium transition-all duration-300 cursor-pointer block active:scale-[0.98]"
@@ -383,11 +386,163 @@ const HeroButton = () => {
   );
 };
 
+/* --- RAZORPAY PAYMENT SUCCESS MODAL --- */
+interface PaymentSuccessModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const PaymentSuccessModal: React.FC<PaymentSuccessModalProps> = ({ isOpen, onClose }) => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, onClose]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          {/* Backdrop with rich blur */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/85 backdrop-blur-md cursor-pointer"
+            aria-hidden="true"
+          />
+
+          {/* Modal Card - Charcoal, Parchment & Saffron/Gold Aesthetics */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 20 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-lg bg-[#0F1622] border border-[#8C7A5B]/70 rounded-2xl shadow-[0_25px_70px_rgba(0,0,0,0.8)] p-6 sm:p-10 text-center overflow-hidden z-10"
+            role="dialog"
+            aria-modal="true"
+          >
+            {/* Ambient Background Saffron Glows */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-72 h-36 bg-[#B84A32]/20 blur-3xl pointer-events-none rounded-full" />
+            <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-64 h-32 bg-[#D4AF37]/15 blur-3xl pointer-events-none rounded-full" />
+
+            {/* Clean Close Icon Button */}
+            <button
+              onClick={onClose}
+              aria-label="Close modal"
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            >
+              <X size={20} strokeWidth={2} />
+            </button>
+
+            {/* Sacred Icon Badge */}
+            <div className="mx-auto w-16 h-16 rounded-full bg-[#18202D] border border-[#D4AF37]/50 flex items-center justify-center mb-5 shadow-inner relative">
+              <div className="absolute inset-0 rounded-full bg-[#D4AF37]/10 animate-ping opacity-30 pointer-events-none" />
+              <CheckCircle2 size={32} className="text-[#D4AF37]" strokeWidth={1.75} />
+            </div>
+
+            {/* Sacred Tag */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B84A32]/40 bg-[#B84A32]/10 text-[#E87A60] text-[0.65rem] sm:text-xs font-['Lato'] tracking-[0.25em] uppercase font-medium mb-4">
+              <span>Sacred Offering Confirmed</span>
+            </div>
+
+            {/* Main Heading */}
+            <h3 className="font-['Playfair_Display'] font-medium text-2xl sm:text-3xl text-[#FDFBF7] leading-snug mb-4">
+              Namaskaram, Thank you for purchasing Guru Paduka Stotram.
+            </h3>
+
+            {/* Subtext */}
+            <p className="text-zinc-300 font-['Lato'] text-sm sm:text-base leading-relaxed mb-8 max-w-md mx-auto">
+              Your official payment receipt has been emailed to you by Razorpay. You can watch your recorded masterclass right here:
+            </p>
+
+            {/* Prominent Action Button */}
+            <div className="flex flex-col gap-3">
+              <a
+                href="https://www.youtube.com/watch?v=j3KVjUmz3Sk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-4 px-6 rounded-full bg-gradient-to-r from-[#B84A32] via-[#C95B42] to-[#B84A32] hover:brightness-110 text-white font-serif text-sm sm:text-base tracking-[0.16em] uppercase font-medium shadow-[0_10px_30px_rgba(184,74,50,0.35)] hover:shadow-[0_14px_40px_rgba(184,74,50,0.5)] transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer group active:scale-[0.98]"
+              >
+                <Play size={18} fill="currentColor" className="text-white group-hover:scale-110 transition-transform" />
+                <span>Watch Masterclass</span>
+                <ExternalLink size={15} className="opacity-80 group-hover:translate-x-0.5 transition-transform" />
+              </a>
+
+              {/* Dismiss / Return to storefront button */}
+              <button
+                onClick={onClose}
+                className="w-full py-3 px-6 rounded-full border border-zinc-700/80 hover:border-zinc-500 text-zinc-300 hover:text-white text-xs sm:text-sm font-['Lato'] tracking-[0.15em] uppercase transition-colors cursor-pointer mt-1"
+              >
+                Return to Storefront
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 function App() {
   const [activeTheme, setActiveTheme] = useState('light');
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Detect return from Razorpay payment
+    const searchParams = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#\/?/, '?'));
+
+    const hasPaymentSuccess =
+      searchParams.has('razorpay_payment_id') ||
+      searchParams.has('razorpay_payment_link_id') ||
+      searchParams.get('razorpay_payment_link_status') === 'paid' ||
+      searchParams.get('payment') === 'success' ||
+      searchParams.get('payment_status') === 'success' ||
+      searchParams.get('status') === 'success' ||
+      searchParams.get('paid') === 'true' ||
+      searchParams.get('payment_success') === 'true' ||
+      searchParams.get('guru_paduka_success') === 'true' ||
+      hashParams.has('razorpay_payment_id') ||
+      hashParams.get('payment') === 'success';
+
+    if (hasPaymentSuccess) {
+      setShowSuccessModal(true);
+    }
+  }, []);
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    // Clean up payment query parameters from URL without reloading
+    if (window.history && window.history.replaceState) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('razorpay_payment_id');
+      url.searchParams.delete('razorpay_payment_link_id');
+      url.searchParams.delete('razorpay_payment_link_status');
+      url.searchParams.delete('razorpay_signature');
+      url.searchParams.delete('payment');
+      url.searchParams.delete('payment_status');
+      url.searchParams.delete('status');
+      url.searchParams.delete('paid');
+      url.searchParams.delete('payment_success');
+      url.searchParams.delete('guru_paduka_success');
+      const cleanUrl = url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : '');
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -829,6 +984,9 @@ function App() {
           </a>
         </motion.div>
       </AnimatePresence>
+
+      {/* RAZORPAY PAYMENT SUCCESS MODAL */}
+      <PaymentSuccessModal isOpen={showSuccessModal} onClose={handleCloseModal} />
 
     </div>
   );
